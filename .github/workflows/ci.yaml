@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Cache node_modules
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      # Install dependencies
+      - run: npm ci
+
+      # Setup Python for MCP server
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      # Install uv for Python dependencies
+      - run: pip install uv
+
+      # Run Nx setup
+      - uses: nrwl/nx-set-shas@v4
+
+      # Set TEST_MODE for CI
+      - run: echo "TEST_MODE=true" >> $GITHUB_ENV
+
+      # Run affected tests and builds
+      - run: npx nx affected -t=lint,test,build
+
+      # Test MCP server startup
+      - run: |
+          cd apps/mcp/cli_use
+          uv venv --allow-existing
+          uv pip install --editable .
+          timeout 10s uv run cli_use_server start --transport sse --port 9000 || true

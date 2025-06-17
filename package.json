@@ -4,12 +4,24 @@
   "description": "Template for orchestrating multiple Claude actors",
   "private": true,
   "scripts": {
-    "nx": "nx"
+    "nx": "nx",
+    "test": "nx run-many --target=test",
+    "lint": "nx run-many --target=lint",
+    "build": "nx run-many --target=build"
   },
   "devDependencies": {
+    "@nx/eslint": "20.1.3",
+    "@nx/eslint-plugin": "^20.1.3",
+    "@nx/jest": "20.1.3",
     "@nx/js": "20.1.3",
     "@nx/workspace": "20.1.3",
-    "nx": "20.1.3"
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "@typescript-eslint/parser": "^8.31.0",
+    "eslint": "8.57.0",
+    "jest": "^29.7.0",
+    "nx": "20.1.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.31.0"
   },
   "workspaces": [
     "packages/*"
