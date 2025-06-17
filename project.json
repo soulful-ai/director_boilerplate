@@ -1,0 +1,67 @@
+{
+  "name": "workspace",
+  "$schema": "./node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "generate-mcp-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./scripts/generate-mcp-config.sh",
+        "cwd": "."
+      }
+    },
+    "setup-workspace": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mkdir -p .shared-workspace/{tasks,responses,context,logs} && echo 'Workspace initialized'",
+        "cwd": "."
+      }
+    },
+    "start-director": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run nx run mcp-cli_use:serve-sse",
+        "cwd": "."
+      }
+    },
+    "start-orchestration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./scripts/claude-orchestration.sh",
+        "cwd": "."
+      }
+    },
+    "start-actor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'Starting actor: ' && cd packages/${actor} && npm run nx run mcp-cli_use:serve-sse",
+        "cwd": "."
+      },
+      "configurations": {
+        "example": {
+          "command": "echo 'Add actors as git submodules in packages/ directory'"
+        }
+      }
+    },
+    "sync-submodules": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "git submodule update --init --recursive",
+        "cwd": "."
+      }
+    },
+    "update-actors": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "git submodule foreach 'git checkout main && git pull origin main'",
+        "cwd": "."
+      }
+    },
+    "submodules:status": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "git submodule status",
+        "cwd": "."
+      }
+    }
+  }
+}
