@@ -15,7 +15,6 @@
     ],
     "sharedGlobals": []
   },
-  "nxCloudId": "director-orchestration",
   "targetDefaults": {
     "build": {
       "cache": true,
