@@ -19,14 +19,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Cache node_modules
+      # Setup Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "npm"
 
       # Install dependencies
-      - run: npm ci
+      - run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       # Setup Python for MCP server
       - uses: actions/setup-python@v5
