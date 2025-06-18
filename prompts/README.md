@@ -11,11 +11,11 @@ Concise, actionable guides for Director operations (max 100 lines each).
 source .env.detected
 
 # Start Director
-npm run nx run workspace:start-director
+npx nx run workspace:start-director
 
 # Actor management
-npm run nx run workspace:sync-submodules
-npm run nx run workspace:start-actor --actor=[name]
+npx nx run workspace:sync-submodules
+npx nx run workspace:start-actor --actor=[name]
 ```
 
 ### Task Delegation

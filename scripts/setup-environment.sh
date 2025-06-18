@@ -89,8 +89,8 @@ echo ""
 echo "Next steps:"
 echo "1. Copy .env.example to .env if not exists"
 echo "2. Update .env with any specific configurations"
-echo "3. Run: npm run nx generate-mcp-config"
-echo "4. Start orchestration: npm run nx run workspace:start-orchestration"
+echo "3. Run: npx nx generate-mcp-config"
+echo "4. Start orchestration: npx nx run workspace:start-orchestration"
 
 # Create .env from .env.example if it doesn't exist
 if [ ! -f .env ] && [ -f .env.example ]; then

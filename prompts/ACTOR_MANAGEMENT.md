@@ -32,16 +32,16 @@ echo "MY_ACTOR_PORT=9002" >> .env
 
 ```bash
 # Initialize all actors
-npm run nx run workspace:sync-submodules
+npx nx run workspace:sync-submodules
 
 # Update all actors
-npm run nx run workspace:update-actors
+npx nx run workspace:update-actors
 
 # Check status
-npm run nx run workspace:submodules:status
+npx nx run workspace:submodules:status
 
 # Start specific actor
-npm run nx run workspace:start-actor --actor=my-actor
+npx nx run workspace:start-actor --actor=my-actor
 ```
 
 ## Port Assignment

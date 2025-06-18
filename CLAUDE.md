@@ -2,6 +2,8 @@
 
 You are the Director, responsible for orchestrating specialized Claude actors to handle complex tasks through git submodule management and shared workspace communication.
 
+**Note**: This is a director boilerplate. Directors operate from workspace root with their brain in a git submodule (like `pm/`). All actors are siblings in flat structure.
+
 ## Director Overview
 
 **Multi-Actor Orchestration System** with task delegation and quality control:
@@ -44,11 +46,11 @@ You are the Director, responsible for orchestrating specialized Claude actors to
 ### Working Directory Rules
 - **CRITICAL**: Always operate from Director workspace root
 - **Path Resolution**: Use environment variables from `.env`
-- **Actor Access**: Use `cd packages/{actor}` only when needed
+- **Actor Access**: Use `cd {actor}` for actor operations (flat structure)
 - **Return to Root**: Always return to workspace root after operations
 
 ### Package Management
-- **Director workspace**: Use `npm run nx` commands
+- **Director workspace**: Use `npx nx` commands
 - **Actor-specific**: Follow actor's preferred tooling
 - **Environment Variables**: Source `.env.detected` for paths
 
@@ -176,13 +178,13 @@ EOF
 ./scripts/setup-environment.sh
 
 # Start orchestration
-npm run nx run workspace:start-orchestration
+npx nx run workspace:start-orchestration
 
 # Start specific actor
-npm run nx run workspace:start-actor --actor=[name]
+npx nx run workspace:start-actor --actor=[name]
 
 # Setup shared workspace
-npm run nx run workspace:setup-workspace
+npx nx run workspace:setup-workspace
 ```
 
 ### Environment Configuration
@@ -287,10 +289,10 @@ echo "[ACTOR]_PORT=900X" >> .env
 echo $WORKSPACE_ROOT && ls CLAUDE.md
 
 # Verify orchestration
-npm run nx run workspace:setup-workspace
+npx nx run workspace:setup-workspace
 
 # Test actor communication
-npm run nx run workspace:start-actor --actor=[name] --dry-run
+npx nx run workspace:start-actor --actor=[name] --dry-run
 ```
 
 ### Common Issues

@@ -51,20 +51,20 @@ Template for creating orchestrator systems that manage multiple specialized Clau
    ```bash
    cp .env.example .env
    # Edit .env with your paths and settings
-   npm run nx generate-mcp-config
+   npx nx generate-mcp-config
    ```
 
 ## Start Development
 
 ```bash
 # Quick start - Director only
-npm run nx run workspace:start-director
+npx nx run workspace:start-director
 
 # Full orchestration system
-npm run nx run workspace:start-orchestration
+npx nx run workspace:start-orchestration
 
 # Individual actor CLIs (after adding actors)
-npm run nx run workspace:start-cli:[actor-name]    # Ports 9001+
+npx nx run workspace:start-cli:[actor-name]    # Ports 9001+
 ```
 
 ## Adding Actors
@@ -129,20 +129,20 @@ Update `.env` with actor paths:
 
 ```bash
 # Director operations
-npm run nx run workspace:start-director          # Start director only
-npm run nx run workspace:setup-workspace         # Initialize shared workspace
-npm run nx list                                  # Available generators
-npm run nx graph                                 # Project dependencies
+npx nx run workspace:start-director          # Start director only
+npx nx run workspace:setup-workspace         # Initialize shared workspace
+npx nx list                                  # Available generators
+npx nx graph                                 # Project dependencies
 
 # Actor management
-npm run nx run workspace:sync-submodules         # Initialize all actors
-npm run nx run workspace:update-actors           # Update all to latest
-npm run nx run workspace:start-actor --actor=[name]  # Start specific actor
+npx nx run workspace:sync-submodules         # Initialize all actors
+npx nx run workspace:update-actors           # Update all to latest
+npx nx run workspace:start-actor --actor=[name]  # Start specific actor
 
 # Development
-npm run nx run workspace:test                    # Run tests
-npm run nx run workspace:lint                    # Lint code
-npm run nx run workspace:build                   # Build all
+npx nx run workspace:test                    # Run tests
+npx nx run workspace:lint                    # Lint code
+npx nx run workspace:build                   # Build all
 ```
 
 ## Customization Guide
@@ -196,10 +196,10 @@ echo $WORKSPACE_ROOT
 source .env.detected
 
 # Check actor status
-npm run nx run workspace:submodules:status
+npx nx run workspace:submodules:status
 
 # Test shared workspace
-npm run nx run workspace:setup-workspace
+npx nx run workspace:setup-workspace
 ```
 
 ### Common Issues

@@ -37,7 +37,7 @@ deadline: 2 hours
 EOF
 
 # Start actor
-npm run nx run workspace:start-actor --actor=coder
+npx nx run workspace:start-actor --actor=coder
 ```
 
 ## Monitoring Responses
