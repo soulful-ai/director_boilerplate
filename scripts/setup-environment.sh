@@ -21,7 +21,8 @@ get_workspace_root() {
     local env_type=$1
     
     if [ "$env_type" = "codespace" ]; then
-        echo "/workspaces/workspace"
+        # Use the current workspace name
+        echo "/workspaces/$(basename $GITHUB_REPOSITORY 2>/dev/null || echo 'workspace')"
     else
         # Try to find workspace root by looking for CLAUDE.md
         local current_dir=$(pwd)
@@ -56,6 +57,7 @@ ENV_TYPE=$ENV_TYPE
 
 # Workspace paths
 WORKSPACE_ROOT=$WORKSPACE_ROOT
+DIRECTOR_HOME=\$WORKSPACE_ROOT
 MCP_CLI_DIR=\$WORKSPACE_ROOT/apps/mcp/cli_use
 ALLOWED_DIR=\$WORKSPACE_ROOT
 SHARED_WORKSPACE_PATH=\$WORKSPACE_ROOT/.shared-workspace
@@ -68,9 +70,25 @@ DIRECTOR_NAME=director
 EOF
 
 # Find and add actor paths
-if [ -d "$WORKSPACE_ROOT/packages" ]; then
+# Check for flat structure (sibling directories)
+if [ -f "../CLAUDE.md" ]; then
     echo "" >> .env.detected
-    echo "# Actor paths (auto-detected)" >> .env.detected
+    echo "# Actor paths (flat structure - auto-detected)" >> .env.detected
+    
+    for actor_dir in ../*/; do
+        if [ -d "$actor_dir" ] && [ "$actor_dir" != "../$(basename $WORKSPACE_ROOT)/" ]; then
+            # Skip boilerplate directories
+            actor_name=$(basename "$actor_dir")
+            if [[ ! "$actor_name" =~ _boilerplate$ ]] && [ -f "$actor_dir/project.json" ]; then
+                actor_name_upper=$(echo "$actor_name" | tr '[:lower:]' '[:upper:]')
+                echo "${actor_name_upper}_ROOT=\$WORKSPACE_ROOT/../$actor_name" >> .env.detected
+            fi
+        fi
+    done
+# Check for nested structure (packages directory)
+elif [ -d "$WORKSPACE_ROOT/packages" ]; then
+    echo "" >> .env.detected
+    echo "# Actor paths (nested structure - auto-detected)" >> .env.detected
     
     for actor_dir in $WORKSPACE_ROOT/packages/*/; do
         if [ -d "$actor_dir" ]; then

@@ -1,5 +1,5 @@
 {
-  "name": "workspace",
+  "name": "director",
   "$schema": "./node_modules/nx/schemas/project-schema.json",
   "targets": {
     "generate-mcp-config": {
@@ -19,7 +19,7 @@
     "start-director": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run nx run mcp-cli_use:serve-sse",
+        "command": "npx nx run mcp-cli_use:serve",
         "cwd": "."
       }
     },
@@ -33,7 +33,7 @@
     "start-actor": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "echo 'Starting actor: ' && cd packages/${actor} && npm run nx run mcp-cli_use:serve-sse",
+        "command": "echo 'Starting actor: ${actor}' && cd ..//${actor} 2>/dev/null || cd packages/${actor} && npx nx serve",
         "cwd": "."
       },
       "configurations": {

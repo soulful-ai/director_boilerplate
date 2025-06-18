@@ -5,14 +5,25 @@
       "command": "npx",
       "args": [
         "nx-mcp@latest",
-        "${WORKSPACE_ROOT}"
+        "${DIRECTOR_HOME}"
       ]
     },
     "cli_use": {
-      "type": "sse",
-      "url": "http://localhost:9000/sse",
-      "headers": {
-        "Content-Type": "text/event-stream"
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory",
+        "${MCP_CLI_DIR}",
+        "run",
+        "cli_use"
+      ],
+      "env": {
+        "ALLOWED_DIR": "${ALLOWED_DIR}",
+        "ALLOWED_COMMANDS": "${ALLOWED_COMMANDS:-all}",
+        "ALLOWED_FLAGS": "${ALLOWED_FLAGS:-all}",
+        "MAX_COMMAND_LENGTH": "${MAX_COMMAND_LENGTH:-1024}",
+        "COMMAND_TIMEOUT": "${COMMAND_TIMEOUT:-60}",
+        "ALLOW_SHELL_OPERATORS": "${ALLOW_SHELL_OPERATORS:-true}"
       }
     }
   }

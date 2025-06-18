@@ -1,7 +1,14 @@
 {
   "name": "director-boilerplate",
   "version": "1.0.0",
-  "description": "Template for orchestrating multiple Claude actors",
+  "description": "Production-ready template for AI orchestration systems using Claude actors",
+  "keywords": ["ai", "orchestration", "claude", "mcp", "nx", "monorepo"],
+  "author": "Soulful AI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soulful-ai/director_boilerplate"
+  },
   "private": true,
   "scripts": {
     "test": "npx nx run-many --target=test",

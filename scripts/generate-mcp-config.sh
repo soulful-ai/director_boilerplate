@@ -1,39 +1,36 @@
 #!/bin/bash
 
-# Generate MCP configuration from template
+# Generate .mcp.json from template and environment variables
 
-echo "🔧 Generating MCP configuration..."
+# Check if .env exists
+if [[ ! -f .env ]]; then
+    echo "Error: .env file not found. Please copy .env.example to .env and configure it."
+    exit 1
+fi
 
 # Load environment variables
-if [ -f .env.detected ]; then
-    export $(cat .env.detected | grep -v '^#' | xargs)
-fi
+set -a  # automatically export all variables
+source .env
+set +a  # turn off automatic export
 
-if [ -f .env ]; then
-    export $(cat .env | grep -v '^#' | xargs)
-fi
-
-# Check if template exists
-if [ ! -f .mcp.json.template ]; then
-    echo "❌ Error: .mcp.json.template not found!"
+# Check required variables
+if [[ -z "$MCP_CLI_DIR" || -z "$ALLOWED_DIR" ]]; then
+    echo "Error: MCP_CLI_DIR and ALLOWED_DIR must be set in .env"
     exit 1
 fi
 
 # Generate .mcp.json from template
-envsubst < .mcp.json.template > .mcp.json
-
-echo "✅ Generated .mcp.json with environment-specific values"
-echo ""
-echo "MCP servers configured:"
-echo "- nx-mcp: Nx workspace tools"
-echo "- cli_use: Director CLI on port ${DIRECTOR_PORT:-9000}"
-
-# Add actor MCP servers if they exist
-if [ -d "packages" ]; then
-    for actor_dir in packages/*/; do
-        if [ -d "$actor_dir" ] && [ -f "$actor_dir/.mcp.json.template" ]; then
-            actor_name=$(basename "$actor_dir")
-            echo "- $actor_name: Actor CLI server"
-        fi
-    done
+# For Director, output to parent directory (workspace root) if in flat structure
+# Otherwise output to current directory
+if [[ -f "../CLAUDE.md" ]]; then
+    # Flat structure - output to parent
+    envsubst < .mcp.json.template > ../.mcp.json
+    echo "Generated ../.mcp.json (at workspace root) with paths:"
+else
+    # Standalone or nested - output to current directory
+    envsubst < .mcp.json.template > .mcp.json
+    echo "Generated .mcp.json with paths:"
 fi
+
+echo "  MCP_CLI_DIR: $MCP_CLI_DIR"
+echo "  ALLOWED_DIR: $ALLOWED_DIR"

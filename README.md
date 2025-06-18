@@ -1,15 +1,15 @@
 # Director Boilerplate
 
-## Purpose
+A production-ready template for creating AI orchestration systems that coordinate multiple specialized Claude actors. This boilerplate provides the foundation for building complex AI systems with proper task delegation, quality control, and deployment management.
 
-Template for creating orchestrator systems that manage multiple specialized Claude actors. Provides task delegation, quality control, test environment deployment, and production release management through git submodule-based actor coordination.
+## Key Features
 
-## Important Note
-
-**Actor Agnostic**: This template works with any type of specialized actors  
-**Port Convention**: Director uses 9000, actors use 9001-9099  
-**Communication**: Real-time shared workspace streaming  
-**Environments**: Supports both local and GitHub Codespaces
+- **Multi-Actor Orchestration**: Coordinate multiple specialized AI actors via git submodules
+- **MCP Protocol Support**: Built-in Model Context Protocol server for Claude integration
+- **Flexible Architecture**: Supports both flat and nested workspace structures
+- **Environment Agnostic**: Works seamlessly in local development and GitHub Codespaces
+- **Security First**: Configurable command restrictions and authentication support
+- **Production Ready**: Includes CI/CD patterns, testing framework, and deployment guides
 
 ## Folder Structure
 
@@ -18,7 +18,7 @@ Template for creating orchestrator systems that manage multiple specialized Clau
 ├── apps/
 │   └── mcp/
 │       └── cli_use/          # Director MCP server (port 9000)
-├── packages/                 # Actor submodules (added by organization)
+├── packages/                 # Actor submodules (optional - for nested structure)
 ├── prompts/                  # Actionable workflow guides
 ├── scripts/                  # Orchestration automation
 ├── libs/                     # Shared libraries
@@ -36,10 +36,17 @@ Template for creating orchestrator systems that manage multiple specialized Clau
 
 ## Installation
 
-1. **Clone repository:**
+1. **Create from template:**
    ```bash
-   git clone https://github.com/[your-org]/[your-director]
-   cd [your-director]
+   # Clone the boilerplate
+   git clone https://github.com/soulful-ai/director_boilerplate my-director
+   cd my-director
+   
+   # Remove boilerplate history and initialize your own
+   rm -rf .git
+   git init
+   git add .
+   git commit -m "Initial commit from director_boilerplate"
    ```
 
 2. **Setup environment:**
@@ -47,11 +54,11 @@ Template for creating orchestrator systems that manage multiple specialized Clau
    ./scripts/setup-environment.sh
    ```
 
-3. **Configure MCP:**
+3. **Configure environment:**
    ```bash
    cp .env.example .env
-   # Edit .env with your paths and settings
-   npx nx generate-mcp-config
+   # Edit .env with your specific settings
+   ./scripts/generate-mcp-config.sh
    ```
 
 ## Start Development
@@ -61,10 +68,10 @@ Template for creating orchestrator systems that manage multiple specialized Clau
 npx nx run workspace:start-director
 
 # Full orchestration system
-npx nx run workspace:start-orchestration
+npx nx run director:start-orchestration
 
 # Individual actor CLIs (after adding actors)
-npx nx run workspace:start-cli:[actor-name]    # Ports 9001+
+npx nx run director:start-actor --actor=[actor-name]
 ```
 
 ## Adding Actors
@@ -72,32 +79,48 @@ npx nx run workspace:start-cli:[actor-name]    # Ports 9001+
 ### 1. Create Actor from Boilerplate
 
 ```bash
-# Clone actor boilerplate
-cd packages
-git clone https://github.com/soulful-ai/boilerplate.git [actor-name]
-cd [actor-name]
+# For flat structure (recommended)
+cd ..
+git clone https://github.com/soulful-ai/actor_boilerplate my-actor
+cd my-actor
 
-# Customize for your domain
-git remote set-url origin https://github.com/[your-org]/[actor-name].git
-# Edit CLAUDE.md, add specialized apps, update port assignment
+# For nested structure
+# mkdir -p packages
+# cd packages
+# git clone https://github.com/soulful-ai/actor_boilerplate my-actor
+# cd my-actor
+
+# Initialize as your own repository
+rm -rf .git
+git init
+# Customize CLAUDE.md, add domain-specific apps, set port (900X)
 ```
 
 ### 2. Add as Submodule
 
 ```bash
-# Add to director
-git submodule add https://github.com/[your-org]/[actor-name] packages/[actor-name]
+# For flat structure (recommended)
+cd path/to/director
+git submodule add https://github.com/[your-org]/my-actor ../my-actor
 
-# Update orchestration config
-# Add to project.json, scripts, and .env
+# For nested structure
+# git submodule add https://github.com/[your-org]/my-actor packages/my-actor
+
+# Update director configuration
+# Add actor to .env and project.json
 ```
 
 ### 3. Configure Communication
 
-Update `.env` with actor paths:
+Update `.env` with actor configuration:
 ```bash
-[ACTOR_NAME]_ROOT=$WORKSPACE_ROOT/packages/[actor-name]
-[ACTOR_NAME]_PORT=900X
+# For flat structure
+MY_ACTOR_ROOT=$WORKSPACE_ROOT/../my-actor
+MY_ACTOR_PORT=9001
+
+# For nested structure
+# MY_ACTOR_ROOT=$WORKSPACE_ROOT/packages/my-actor
+# MY_ACTOR_PORT=9001
 ```
 
 ## Key Patterns
