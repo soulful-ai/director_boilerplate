@@ -49,12 +49,18 @@ A production-ready template for creating AI orchestration systems that coordinat
    git commit -m "Initial commit from director_boilerplate"
    ```
 
-2. **Setup environment:**
+2. **Install dependencies:**
+   ```bash
+   # Install all dependencies (Node, Python, MCP)
+   ./scripts/install-all.sh
+   ```
+
+3. **Setup environment:**
    ```bash
    ./scripts/setup-environment.sh
    ```
 
-3. **Configure environment:**
+4. **Configure environment:**
    ```bash
    cp .env.example .env
    # Edit .env with your specific settings

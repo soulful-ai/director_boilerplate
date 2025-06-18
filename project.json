@@ -62,6 +62,13 @@
         "command": "git submodule status",
         "cwd": "."
       }
+    },
+    "serve-public": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./scripts/start-public.sh",
+        "description": "Start Director MCP server with public Codespace port"
+      }
     }
   }
 }

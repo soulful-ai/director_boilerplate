@@ -21,7 +21,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv venv --allow-existing && uv pip install --editable . && source ../../../.env && uv run cli_use",
+        "command": "uv venv --allow-existing && uv pip install --editable . && ../../../scripts/run-with-env.sh uv run cli_use",
         "cwd": "apps/mcp/cli_use"
       }
     },
@@ -35,21 +35,21 @@
     "serve-sse": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv venv --allow-existing && uv pip install --editable . && source ../../../.env && uv run cli_use_server start --transport sse --port 9000",
+        "command": "uv venv --allow-existing && uv pip install --editable . && ../../../scripts/run-with-env.sh uv run cli_use_server start --transport sse --port 9000",
         "cwd": "apps/mcp/cli_use"
       }
     },
     "serve-sse-remote": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv venv --allow-existing && uv pip install --editable . && source ../../../.env && ALLOWED_COMMANDS=$REMOTE_ALLOWED_COMMANDS ALLOWED_FLAGS=$REMOTE_ALLOWED_FLAGS COMMAND_TIMEOUT=$REMOTE_COMMAND_TIMEOUT MAX_COMMAND_LENGTH=$REMOTE_MAX_COMMAND_LENGTH ALLOW_SHELL_OPERATORS=$REMOTE_ALLOW_SHELL_OPERATORS uv run cli_use_server start --transport sse --port 9000",
+        "command": "uv venv --allow-existing && uv pip install --editable . && ../../../scripts/run-with-env.sh bash -c 'ALLOWED_COMMANDS=$REMOTE_ALLOWED_COMMANDS ALLOWED_FLAGS=$REMOTE_ALLOWED_FLAGS COMMAND_TIMEOUT=$REMOTE_COMMAND_TIMEOUT MAX_COMMAND_LENGTH=$REMOTE_MAX_COMMAND_LENGTH ALLOW_SHELL_OPERATORS=$REMOTE_ALLOW_SHELL_OPERATORS uv run cli_use_server start --transport sse --port 9000'",
         "cwd": "apps/mcp/cli_use"
       }
     },
     "serve-sse-dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv venv --allow-existing && uv pip install --editable . && source ../../../.env && ALLOWED_COMMANDS=$DEV_ALLOWED_COMMANDS ALLOWED_FLAGS=$DEV_ALLOWED_FLAGS COMMAND_TIMEOUT=$DEV_COMMAND_TIMEOUT ALLOW_SHELL_OPERATORS=$DEV_ALLOW_SHELL_OPERATORS uv run cli_use_server start --transport sse --port 9000",
+        "command": "uv venv --allow-existing && uv pip install --editable . && ../../../scripts/run-with-env.sh bash -c 'ALLOWED_COMMANDS=$DEV_ALLOWED_COMMANDS ALLOWED_FLAGS=$DEV_ALLOWED_FLAGS COMMAND_TIMEOUT=$DEV_COMMAND_TIMEOUT ALLOW_SHELL_OPERATORS=$DEV_ALLOW_SHELL_OPERATORS uv run cli_use_server start --transport sse --port 9000'",
         "cwd": "apps/mcp/cli_use"
       }
     }
