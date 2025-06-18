@@ -1,35 +1,32 @@
 #!/bin/bash
 
-# Generate .mcp.json from template and environment variables
+# PM Director MCP Configuration Generator
+# Always generates .mcp.json at workspace root for Claude access
 
-# Check if .env exists
-if [[ ! -f .env ]]; then
-    echo "Error: .env file not found. Please copy .env.example to .env and configure it."
+# Source PM's .env file
+if [[ -f ".env" ]]; then
+    source .env
+elif [[ -f "../pm/.env" ]]; then
+    source ../pm/.env
+else
+    echo "Error: PM .env file not found. Run setup-environment.sh first."
     exit 1
 fi
-
-# Load environment variables
-set -a  # automatically export all variables
-source .env
-set +a  # turn off automatic export
 
 # Check required variables
 if [[ -z "$MCP_CLI_DIR" || -z "$ALLOWED_DIR" ]]; then
-    echo "Error: MCP_CLI_DIR and ALLOWED_DIR must be set in .env"
+    echo "Error: MCP_CLI_DIR and ALLOWED_DIR must be set in PM's .env"
     exit 1
 fi
 
-# Generate .mcp.json from template
-# For Director, output to parent directory (workspace root) if in flat structure
-# Otherwise output to current directory
-if [[ -f "../CLAUDE.md" ]]; then
-    # Flat structure - output to parent
+# PM Director always outputs to workspace root
+# This is a special behavior for PM Director only
+if [[ -f ".mcp.json.template" ]]; then
     envsubst < .mcp.json.template > ../.mcp.json
     echo "Generated ../.mcp.json (at workspace root) with paths:"
 else
-    # Standalone or nested - output to current directory
-    envsubst < .mcp.json.template > .mcp.json
-    echo "Generated .mcp.json with paths:"
+    echo "Error: .mcp.json.template not found"
+    exit 1
 fi
 
 echo "  MCP_CLI_DIR: $MCP_CLI_DIR"
