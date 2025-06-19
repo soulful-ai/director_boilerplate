@@ -64,8 +64,16 @@ A production-ready template for creating AI orchestration systems that coordinat
    ```bash
    cp .env.example .env
    # Edit .env with your specific settings
-   ./scripts/generate-mcp-config.sh
    ```
+
+5. **Setup MCP (Model Context Protocol):**
+   ```bash
+   # Generate MCP configuration for Claude
+   npx nx run workspace:generate-mcp-config
+   # Restart Claude Desktop to pick up the configuration
+   ```
+   
+   See [prompts/ENVIRONMENT_SETUP.md](prompts/ENVIRONMENT_SETUP.md) for detailed MCP setup instructions.
 
 ## Start Development
 

@@ -56,6 +56,35 @@ CODER_ROOT=$WORKSPACE_ROOT/packages/coder
 CODER_PORT=9001
 ```
 
+## MCP (Model Context Protocol) Setup
+
+### Quick MCP Setup
+```bash
+# 1. Copy environment template
+cp .env.example .env
+
+# 2. Edit .env to set WORKSPACE_ROOT
+# For Codespaces: WORKSPACE_ROOT=/workspaces/workspace
+# For local: WORKSPACE_ROOT=/path/to/your/workspace
+
+# 3. Source the environment
+source .env
+
+# 4. Generate MCP configuration
+npx nx run workspace:generate-mcp-config
+
+# 5. Verify generation (check parent directory)
+ls -la ../.mcp.json
+
+# 6. Restart Claude to pick up new MCP configuration
+```
+
+### MCP Configuration Details
+- **Template**: `.mcp.json.template` defines MCP server configuration
+- **Output**: `../.mcp.json` (at workspace root for Claude access)
+- **Purpose**: Enables Claude to use CLI tools via MCP protocol
+- **Security**: Configured via ALLOWED_COMMANDS and ALLOWED_FLAGS in .env
+
 ## Troubleshooting
 
 ```bash
@@ -67,4 +96,12 @@ chmod +x scripts/*.sh
 
 # Environment not loading
 source .env.detected && source .env
+
+# MCP config not generating
+# Check .env has required vars:
+grep -E "(MCP_CLI_DIR|ALLOWED_DIR)" .env
+
+# Claude not finding MCP config
+# Ensure it's at workspace root:
+ls -la $WORKSPACE_ROOT/.mcp.json
 ```

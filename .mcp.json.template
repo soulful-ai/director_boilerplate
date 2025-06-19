@@ -1,13 +1,5 @@
 {
-  "servers": {
-    "nx-mcp": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "nx-mcp@latest",
-        "${DIRECTOR_HOME}"
-      ]
-    },
+  "mcpServers": {
     "cli_use": {
       "type": "stdio",
       "command": "uv",
@@ -19,12 +11,20 @@
       ],
       "env": {
         "ALLOWED_DIR": "${ALLOWED_DIR}",
-        "ALLOWED_COMMANDS": "${ALLOWED_COMMANDS:-all}",
-        "ALLOWED_FLAGS": "${ALLOWED_FLAGS:-all}",
-        "MAX_COMMAND_LENGTH": "${MAX_COMMAND_LENGTH:-1024}",
-        "COMMAND_TIMEOUT": "${COMMAND_TIMEOUT:-60}",
-        "ALLOW_SHELL_OPERATORS": "${ALLOW_SHELL_OPERATORS:-true}"
+        "ALLOWED_COMMANDS": "${ALLOWED_COMMANDS}",
+        "ALLOWED_FLAGS": "${ALLOWED_FLAGS}",
+        "MAX_COMMAND_LENGTH": "${MAX_COMMAND_LENGTH}",
+        "COMMAND_TIMEOUT": "${COMMAND_TIMEOUT}",
+        "ALLOW_SHELL_OPERATORS": "${ALLOW_SHELL_OPERATORS}"
       }
+    },
+    "nx-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "nx-mcp@latest",
+        "${DIRECTOR_HOME}"
+      ]
     }
   }
 }
