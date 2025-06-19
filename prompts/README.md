@@ -1,57 +1,104 @@
-# Director Prompt Files
+# Director Prompts Documentation
 
-Concise, actionable guides for Director operations (max 100 lines each).
+Concise, actionable guides for Director operations. Each file is limited to 100 lines for quick access.
 
-## Quick Reference
+## Available Prompts
 
-### Essential Commands
+### Core Documentation
+- **[README.md](README.md)** - This index file listing all prompts
+- **[ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md)** - Dual environment configuration and MCP setup
+- **[ACTOR_MANAGEMENT.md](ACTOR_MANAGEMENT.md)** - Git submodule patterns for actors
+- **[COMMUNICATION_PROTOCOL.md](COMMUNICATION_PROTOCOL.md)** - Shared workspace patterns
+- **[CODESPACE_BROWSER_MANAGEMENT.md](CODESPACE_BROWSER_MANAGEMENT.md)** - Browser and port management
+
+## Quick Start
+
+### 1. Environment Setup
 ```bash
-# Environment setup
+# Auto-detect environment (local vs Codespaces)
 ./scripts/setup-environment.sh
-source .env.detected
 
-# Start Director
-npx nx run workspace:start-director
+# Configure environment
+cp .env.example .env
+vi .env  # Set WORKSPACE_ROOT
+```
 
-# Actor management
-npx nx run workspace:sync-submodules
+### 2. Generate MCP Configuration
+```bash
+# Generate .mcp.json at workspace root
+npx nx run workspace:generate-mcp-config
+
+# Restart Claude to pick up configuration
+```
+
+### 3. Start Orchestration
+```bash
+# Start Director MCP server
+npx nx serve
+
+# Or start full orchestration
+npx nx run workspace:start-orchestration
+```
+
+## Actor Management
+
+### Add New Actor
+```bash
+# Add as git submodule
+git submodule add https://github.com/[org]/[actor] [actor-name]
+
+# Configure in .env
+echo "[ACTOR]_ROOT=\$WORKSPACE_ROOT/[actor-name]" >> .env
+echo "[ACTOR]_PORT=900X" >> .env
+```
+
+### Delegate Tasks
+```bash
+# Write task
+cat > .shared-workspace/tasks/current.md << EOF
+Task for [Actor]: Implement [feature]
+Requirements: [details]
+EOF
+
+# Start actor
 npx nx run workspace:start-actor --actor=[name]
 ```
 
-### Task Delegation
-```bash
-# Write task to shared workspace
-echo "Task content" > .shared-workspace/tasks/actor-task.md
+## Communication Patterns
 
-# Monitor responses
-tail -f .shared-workspace/responses/actor-status.md
+### Monitor Progress
+```bash
+# Watch actor responses
+tail -f .shared-workspace/responses/status.md
+
+# Check for challenges
+watch -n 1 cat .shared-workspace/responses/challenges.md
 ```
 
-### Challenge Escalation
+### Escalate to User
 ```bash
+# Request decision
+echo "@User: Need decision on [topic]" >> .shared-workspace/responses/needs.md
+
 # Report blocker
-echo "CHALLENGE: Missing API key" >> .shared-workspace/responses/challenges.md
-
-# Request user input
-echo "NEEDS: User decision on architecture" >> .shared-workspace/responses/needs.md
+echo "BLOCKED: [Actor] needs [resource]" >> .shared-workspace/responses/blockers.md
 ```
-
-## Available Guides
-
-1. **[Environment Setup](ENVIRONMENT_SETUP.md)** - Configure for local/Codespaces
-2. **[Orchestration Commands](ORCHESTRATION_COMMANDS.md)** - Core Director operations
-3. **[Actor Management](ACTOR_MANAGEMENT.md)** - Add and manage actors
-4. **[Communication Protocol](COMMUNICATION_PROTOCOL.md)** - Shared workspace patterns
-5. **[Task Delegation](TASK_DELEGATION.md)** - Breaking down requests
-6. **[Challenge Escalation](CHALLENGE_ESCALATION.md)** - Handling blockers
-7. **[Test Deployment](TEST_DEPLOYMENT.md)** - Preview environments
-8. **[Production Release](PRODUCTION_RELEASE.md)** - Deployment management
-9. **[Quality Control](QUALITY_CONTROL.md)** - Review standards
-10. **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues
 
 ## Best Practices
 
-- Keep guides under 100 lines
-- Focus on copy-paste commands
-- Test all examples
-- Update with learnings
+1. **Test environments first** - Deploy preview before production
+2. **Immediate escalation** - Don't wait on blockers
+3. **Clear delegation** - Specific requirements for actors
+4. **Monitor quality** - Review actor outputs
+5. **User collaboration** - Frequent check-ins
+
+## Directory Structure
+```
+director/
+├── prompts/          # These documentation files
+├── scripts/          # Automation tools
+├── apps/mcp/         # MCP server implementation
+└── .env              # Configuration (gitignored)
+```
+
+Remember: Orchestrate, don't implement. Delegate to actors!
